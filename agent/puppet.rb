@@ -147,7 +147,6 @@ module MCollective
           end
         end
 
-        args[:options_only] = true
         args[:noop] = request[:noop] if request.include?(:noop)
         args[:environment] = request[:environment] if request[:environment]
         args[:server] = request[:server] if request[:server]

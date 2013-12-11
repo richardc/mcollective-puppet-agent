@@ -287,7 +287,6 @@ describe "puppet agent" do
 
     it "should set splay option to false when force is given" do
       @manager.expects(:runonce!).with({
-        :options_only => true,
         :splay => false,
       }).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :force => true)
@@ -295,37 +294,37 @@ describe "puppet agent" do
     end
 
     it "should support ignoreschedules" do
-      @manager.expects(:runonce!).with({:options_only=>true, :ignoreschedules=>true, :splay=>true, :splaylimit=>30}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:ignoreschedules=>true, :splay=>true, :splaylimit=>30}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :ignoreschedules => true)
       result.should be_successful
     end
 
     it "should support no-noop" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :noop=>false, :splaylimit=>30}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:splay=>true, :noop=>false, :splaylimit=>30}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :noop => false)
       result.should be_successful
     end
 
     it "should support noop" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :noop=>true, :splaylimit=>30}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:splay=>true, :noop=>true, :splaylimit=>30}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :noop => true)
       result.should be_successful
     end
 
     it "should support setting the environment" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :environment=>"rspec", :splaylimit=>30}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:splay=>true, :environment=>"rspec", :splaylimit=>30}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :environment => "rspec")
       result.should be_successful
     end
 
     it "should support setting the server to use" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :server=>"rspec:123", :splaylimit=>30}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:splay=>true, :server=>"rspec:123", :splaylimit=>30}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :server => "rspec:123")
       result.should be_successful
     end
 
     it "should support setting the tags" do
-      @manager.expects(:runonce!).with({:options_only=>true, :tags=>["one", "two"], :splay => true, :splaylimit=>30}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:tags=>["one", "two"], :splay => true, :splaylimit=>30}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :tags => "one,two")
       result.should be_successful
     end
@@ -334,25 +333,25 @@ describe "puppet agent" do
       MCollective::PluginManager.clear
       agent = MCollective::Test::LocalAgentTest.new("puppet", :agent_file => @agent_file, :config => {"plugin.puppet.splay" => false}).plugin
 
-      @manager.expects(:runonce!).with({:options_only=>true, :splay => true, :splaylimit=>30}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:splay => true, :splaylimit=>30}).returns([:signal_running_daemon, []])
       result = agent.call(:runonce, :splay => true)
       result.should be_successful
     end
 
     it "should support setting no-splay" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay => false}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:splay => false}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :splay => false)
       result.should be_successful
     end
 
     it "should support setting splaylimit" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :splaylimit=>60}).returns([:signal_running_daemon, []])
+      @manager.expects(:runonce!).with({:splay=>true, :splaylimit=>60}).returns([:signal_running_daemon, []])
       result = @agent.call(:runonce, :splaylimit => 60)
       result.should be_successful
     end
 
     it "should support running puppet with the given arguments" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :splaylimit=>30}).returns([:run_in_background, ["--rspec"]])
+      @manager.expects(:runonce!).with({:splay=>true, :splaylimit=>30}).returns([:run_in_background, ["--rspec"]])
       @agent.expects(:run).with("puppet agent --rspec", :stdout => :summary, :stderr => :summary, :chomp => true).returns(0)
 
       result = @agent.call(:runonce)
@@ -360,7 +359,7 @@ describe "puppet agent" do
     end
 
     it "should fail with a friendly message if puppet returns non zero" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :splaylimit=>30}).returns([:run_in_background, ["--rspec"]])
+      @manager.expects(:runonce!).with({:splay=>true, :splaylimit=>30}).returns([:run_in_background, ["--rspec"]])
       @agent.expects(:run).with("puppet agent --rspec", :stdout => :summary, :stderr => :summary, :chomp => true).returns(1)
 
       result = @agent.call(:runonce)
@@ -369,7 +368,7 @@ describe "puppet agent" do
     end
 
     it "should fail for unsupported run methods" do
-      @manager.expects(:runonce!).with({:options_only=>true, :splay=>true, :splaylimit=>30}).returns([:rspec, []])
+      @manager.expects(:runonce!).with({:splay=>true, :splaylimit=>30}).returns([:rspec, []])
 
       result = @agent.call(:runonce)
       result.should be_aborted_error

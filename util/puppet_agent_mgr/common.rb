@@ -163,7 +163,7 @@ module MCollective
         # else a single background run will be attempted but this will fail if a idling
         # daemon is present and :signal_daemon was false
         def runonce!(options={})
-          valid_options = [:noop, :signal_daemon, :foreground_run, :tags, :environment, :server, :splay, :splaylimit, :options_only, :ignoreschedules]
+          valid_options = [:noop, :signal_daemon, :foreground_run, :tags, :environment, :server, :splay, :splaylimit, :ignoreschedules]
 
           options.keys.each do |opt|
             raise("Unknown option %s specified" % opt) unless valid_options.include?(opt)
@@ -189,15 +189,12 @@ module MCollective
           end
 
           if foreground_run
-            return :foreground_run, run_in_foreground(clioptions, false) if options[:options_only]
-            return run_in_foreground(clioptions)
+            return :foreground_run, run_in_foreground(clioptions, false)
           elsif idling? && signal_daemon
-            return :signal_running_daemon, clioptions if options[:options_only]
-            return signal_running_daemon
+            return :signal_running_daemon, clioptions
           else
             raise "Cannot run in the background if the daemon is present" unless background_run_allowed?
-            return :run_in_background, run_in_background(clioptions, false) if options[:options_only]
-            return run_in_background(clioptions)
+            return :run_in_background, run_in_background(clioptions, false)
           end
         end
 
