@@ -150,7 +150,6 @@ module MCollective
 
         # do a run based on the following options:
         #
-        # :foreground_run  - runs in the foreground a --test run
         # :signal_daemon   - if the daemon is running, sends it USR1 to wake it up
         # :noop            - enables or disabled noop mode based on true/false
         # :tags            - an array of tags to limit the run to
@@ -163,7 +162,7 @@ module MCollective
         # else a single background run will be attempted but this will fail if a idling
         # daemon is present and :signal_daemon was false
         def runonce!(options={})
-          valid_options = [:noop, :signal_daemon, :foreground_run, :tags, :environment, :server, :splay, :splaylimit, :ignoreschedules]
+          valid_options = [:noop, :signal_daemon, :tags, :environment, :server, :splay, :splaylimit, :ignoreschedules]
 
           options.keys.each do |opt|
             raise("Unknown option %s specified" % opt) unless valid_options.include?(opt)

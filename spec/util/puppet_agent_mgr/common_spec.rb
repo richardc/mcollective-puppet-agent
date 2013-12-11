@@ -98,29 +98,6 @@ module MCollective::Util
           expect { Common.runonce! }.to raise_error(/Puppet is disabled/)
         end
 
-        it "should do a foreground run when requested" do
-          Common.stubs(:applying?).returns(false)
-          Common.stubs(:disabled?).returns(false)
-          Common.stubs(:daemon_present?).returns(false)
-
-          Common.expects(:run_in_foreground)
-          Common.expects(:run_in_background).never
-          Common.expects(:signal_running_daemon).never
-
-          Common.runonce!(:foreground_run => true)
-        end
-
-        it "should support returning foreground run arguments only" do
-          Common.stubs(:applying?).returns(false)
-          Common.stubs(:disabled?).returns(false)
-          Common.stubs(:daemon_present?).returns(false)
-
-          Common.expects(:run_in_background).never
-          Common.expects(:signal_running_daemon).never
-
-          Common.runonce!(:foreground_run => true).should == [:foreground_run, ["--test", "--color=false"]]
-        end
-
         it "should support sending a signal to the daemon when it is idling" do
           Common.stubs(:applying?).returns(false)
           Common.stubs(:disabled?).returns(false)
