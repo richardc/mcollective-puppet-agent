@@ -38,10 +38,6 @@ module MCollective
           true
         end
 
-        def run_in_foreground(clioptions, execute=true)
-          raise "Running puppet in the foreground is not supported on Windows"
-        end
-
         def signal_running_daemon
           raise "Signalling the puppet daemon is not supported on Windows"
         end

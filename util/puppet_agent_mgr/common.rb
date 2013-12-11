@@ -88,14 +88,6 @@ module MCollective
           summary
         end
 
-        def run_in_foreground(clioptions, execute=true)
-          options = ["--test", "--color=false"].concat(clioptions)
-
-          return options unless execute
-
-          %x[puppet agent #{options.join(' ')}]
-        end
-
         def run_in_background(clioptions, execute=true)
           options =["--onetime", "--daemonize", "--color=false"].concat(clioptions)
 
@@ -175,7 +167,6 @@ module MCollective
           splaylimit = options.fetch(:splaylimit, nil)
           noop = options.fetch(:noop, nil)
           signal_daemon = options.fetch(:signal_daemon, true)
-          foreground_run = options.fetch(:foreground_run, false)
           environment = options.fetch(:environment, nil)
           server = options.fetch(:server, nil)
           ignoreschedules = options.fetch(:ignoreschedules, nil)
@@ -187,9 +178,7 @@ module MCollective
             raise "Cannot specify any custom puppet options when the daemon is running"
           end
 
-          if foreground_run
-            return :foreground_run, run_in_foreground(clioptions, false)
-          elsif idling? && signal_daemon
+          if idling? && signal_daemon
             return :signal_running_daemon, clioptions
           else
             raise "Cannot run in the background if the daemon is present" unless background_run_allowed?

@@ -103,7 +103,6 @@ module MCollective::Util
           Common.stubs(:disabled?).returns(false)
           Common.expects(:idling?).returns(true).times(2)
 
-          Common.expects(:run_in_foreground).never
           Common.expects(:run_in_background).never
 
           Common.runonce!.should == [:signal_running_daemon, []]
@@ -115,7 +114,6 @@ module MCollective::Util
           Common.expects(:idling?).returns(true).twice
           Common.expects(:daemon_present?).returns(true)
 
-          Common.expects(:run_in_foreground).never
           Common.expects(:signal_running_daemon).never
           Common.expects(:run_in_background).never
 
@@ -128,7 +126,6 @@ module MCollective::Util
           Common.expects(:idling?).returns(false).twice
           Common.expects(:daemon_present?).returns(false)
 
-          Common.expects(:run_in_foreground).never
           Common.expects(:signal_running_daemon).never
           Common.expects(:run_in_background)
 
@@ -141,7 +138,6 @@ module MCollective::Util
           Common.expects(:idling?).returns(false).twice
           Common.expects(:daemon_present?).returns(false)
 
-          Common.expects(:run_in_foreground).never
           Common.expects(:signal_running_daemon).never
 
           Common.runonce!.should ==  [:run_in_background, ["--onetime", "--daemonize", "--color=false"]]
